@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Jest Tests
+        run: npm test
+
+      - name: Deploy to Azure Functions
+        uses: Azure/functions-action@v1
+        with:
+          app-name: getviewcount
+          package: .
+          publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Run Cypress Tests
+        run: npm run cypress
