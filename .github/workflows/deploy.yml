@@ -27,8 +27,11 @@ jobs:
           cp package.json deployment/
           cp package-lock.json deployment/
 
+      - name: Change to deployment directory
+        run: cd deployment
+
       - name: Create ZIP package
-        run: zip -r deploy.zip ./deployment
+        run: zip -r ../deploy.zip . 
 
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
