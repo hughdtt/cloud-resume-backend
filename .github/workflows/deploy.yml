@@ -26,18 +26,15 @@ jobs:
           cp host.json deployment/
           cp package.json deployment/
           cp package-lock.json deployment/
-      
-      - name: Go to deployment directory
-        run: cd deployment
 
       - name: Create ZIP package
-        run: zip -r ../deploy.zip .
+        run: zip -r deploy.zip ./deployment/*
 
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
           app-name: getviewcount
-          package: ../deploy.zip
+          package: deploy.zip
           publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Run Cypress Tests
