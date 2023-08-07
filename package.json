@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@azure/cosmos": "^3.17.3"
+  },
+  "devDependencies": {
+    "cypress": "^12.17.3",
+    "jest": "^29.6.2"
+  },
+  "scripts": {
+    "test": "jest ./unit-tests/test.js"
+  }
+}
