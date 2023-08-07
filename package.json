@@ -7,6 +7,7 @@
     "jest": "^29.6.2"
   },
   "scripts": {
-    "test": "jest ./unit-tests/test.js"
+    "test": "jest ./unit-tests/test.js",
+    "cypress": "npx cypress run"
   }
 }
