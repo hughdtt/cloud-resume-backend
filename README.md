@@ -14,15 +14,22 @@ The `CosmosCRUD` directory houses the function code, including the `function.jso
 - **CosmosDB Interaction:** The function increments the view count in a CosmosDB container and retrieves the updated count. The function code is written in Javascript so we rely on an Azure/Cosmos package to create client connection.
 - **Environment Variables:** The function relies on environment variables `COSMOS_ENDPOINT` and `COSMOS_KEY` to access the CosmosDB instance.
 
-## Getting Started
+### CI/CD Pipeline
 
-You can download the repo if you'd like. You'll just need VSCode Azure Function Core Tools to test it locally.
+### Web API Architecture
+
+### Azure resource group relationships
+![alt text](/webapi/assets/resource-visualiser.PNG)
+
+## Install
+
+You can download the repo to test it locally if you'd like. You'll just need to have Azure Function Core Tools installed.
 
 ### Local Development
 
 1. Clone the repository
 2. Install the dependencies using `npm install`
-3. Install Azure Functions Core Tools using `npm install -g azure-functions-core-tools@4 --unsafe-perm true` (read more at [Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Cportal%2Cv2%2Cbash&pivots=programming-language-csharp)
+3. Install Azure Functions Core Tools using `npm install -g azure-functions-core-tools --unsafe-perm true` (read more at [Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Cportal%2Cv2%2Cbash&pivots=programming-language-csharp)
 4. Run locally `azurefunctions run`
 5. [Optional] Run unit tests using `npm test`
 6. [Optional] Run smoke tests using `npm cypress` (although my cypress config points to my production api endpoint, you might need to change it. More on [environment variables](https://docs.cypress.io/guides/guides/environment-variables))
@@ -40,7 +47,7 @@ The repository is configured with a GitHub Action workflow that automates the de
 6. **Deploy to Azure Functions:** Uses `Azure/functions-action@v1` to deploy the ZIP package to the specified Azure Functions app.
 7. **Run Cypress Tests:** Executes integration tests using Cypress.
 
-### Configuration
+### Deploy to your own Azure infrastructure
 
 If you're going to deploy your own. Make sure to configure the necessary environment variables in your Azure Functions app settings:
 
@@ -49,5 +56,20 @@ If you're going to deploy your own. Make sure to configure the necessary environ
 
 More on those [Azure environment keys](https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings?tabs=portal)
 
-## Acknowledgements
+### Acknowledgements
 This was done as part of Forrest Brazeal's [Cloud Resume Challenge](https://cloudresumechallenge.dev/).
+
+### Task list
+- [x] Local files reflect Azure function
+- [x] Function works locally
+- [x] Unit test w/ Jest
+- [x] E2E test w/ Cypress
+- [x] Git init
+- [x] Deploy yaml
+    - [x] Tests, build artifacts, deploy to Azure
+- [ ] Diagrams
+    - [ ] CI/CD Pipeline
+    - [ ] Web API Architecture
+    - [x] Resource group relations
+- [ ] ARM template/ bicep files for resource group (environment agnostic ie staging/prod)
+- [ ] YAML infrastructure deploy
