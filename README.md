@@ -40,14 +40,14 @@ For illustrative purposes, the setup for the github actions workflow has been dr
 
 The repository is configured with a GitHub Action workflow that automates the deployment of the function to Azure Functions. The steps for the workflow are in .github/workflows/deploy.yml. Here's an overview of the workflow:
 
-**Track changes for certain folders** For efficiency, I only want workflow to run when certain folders have been changed - ie. not when readme has changed.
-**Checkout Code:** Clones the repository code.
-**Install Dependencies:** Installs all required dependencies (including tests).
-**Run Jest Tests:** Executes unit tests using Jest.
-**Clean Libraries:** Removes development dependencies (omitting dev) to create a lightweight package for deployment.
-**Create ZIP Package:** Zips necessary files and directories for deployment.
-**Deploy to Azure Functions:** Uses `Azure/functions-action@v1` to deploy the ZIP package to the specified Azure Functions app.
-**Run Cypress Tests:** Executes integration tests using Cypress at the end.
+- **Track changes for certain folders** For efficiency, I only want workflow to run when certain folders have been changed - ie. not when readme has changed.
+- **Checkout Code:** Clones the repository code.
+- **Install Dependencies:** Installs all required dependencies (including tests).
+- **Run Jest Tests:** Executes unit tests using Jest.
+- **Clean Libraries:** Removes development dependencies (omitting dev) to create a lightweight package for deployment.
+- **Create ZIP Package:** Zips necessary files and directories for deployment.
+- **Deploy to Azure Functions:** Uses `Azure/functions-action@v1` to deploy the ZIP package to the specified Azure Functions app.
+- **Run Cypress Tests:** Executes integration tests using Cypress at the end.
 
 ### Considerations
 
