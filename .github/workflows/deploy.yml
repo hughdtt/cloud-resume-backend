@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy code to existing environment
 
 on:
   push:
@@ -36,7 +36,7 @@ jobs:
         with:
           app-name: getviewcount
           package: deploy.zip
-          publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
 
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v5
