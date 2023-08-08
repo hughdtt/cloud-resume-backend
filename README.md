@@ -60,11 +60,14 @@ More on those [Azure environment keys](https://learn.microsoft.com/en-us/azure/a
 This was done as part of Forrest Brazeal's [Cloud Resume Challenge](https://cloudresumechallenge.dev/).
 
 ### Task list
-- [x] Local files reflect Azure function
-- [x] Function works locally
+- [x] Manually setup azure function + cosmosDB
+- [x] Using Azure Portal GUI, write function and get function to increment and update cosmosdb entry
+- [x] Download Azure function files to test locally (Kudu app service via portal)
+- [x] Install Azure function core tools and Azure code extensions.
+- [x] Test function locally
 - [x] Unit test w/ Jest
 - [x] E2E test w/ Cypress
-- [x] Git init
+- [x] Git repo as source
 - [x] Deploy yaml
     - [x] Tests, build artifacts, deploy to Azure
 - [ ] Diagrams
