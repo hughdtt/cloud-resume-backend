@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Dependencies
         run: npm install
@@ -19,10 +19,16 @@ jobs:
       - name: Run Jest Tests
         run: npm test
 
+      - name: Clean libraries
+        run: |
+          rm -rf node_modules
+          npm install --production
+
       - name: Create deployment directory
         run: |
           mkdir deployment
           cp -r CosmosCRUD deployment/
+          cp -r node_modules deployment/
           cp host.json deployment/
           cp package.json deployment/
           cp package-lock.json deployment/
@@ -38,4 +44,4 @@ jobs:
           publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Run Cypress Tests
-        run: npm run cypress
+        uses: cypress-io/github-action@v5
