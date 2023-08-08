@@ -4,7 +4,7 @@
 
 The `getviewcount` Web API is an Azure Function that increments and retrieves a view count from a CosmosDB database. It's designed to be triggered via HTTP, supporting both GET and POST methods. This repository contains the necessary code and configuration for deploying the function to Azure with unit testing with Jest and E2E testing with Cypress.
 
-The web api serves as a view counter RESTful API for the frontend of the [Cloud Resume Challenge](https://cloudresumechallenge.dev/).
+The web api serves as a view counter RESTful API for the [frontend](https://github.com/hughdtt/cloud-resume-frontend) of the [Cloud Resume Challenge](https://cloudresumechallenge.dev/).
 
 ### Functionality
 
