@@ -19,7 +19,7 @@ The `CosmosCRUD` directory houses the function code, including the `function.jso
 ### Web API Architecture
 
 ### Azure resource group relationships
-![alt text](/webapi/assets/resource-visualiser.PNG)
+![alt text](./assets/resource-visualiser.PNG)
 
 ## Install
 
