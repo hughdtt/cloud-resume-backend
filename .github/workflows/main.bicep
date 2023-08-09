@@ -1,7 +1,34 @@
 // Define the parameters
+@description('The name of the function app that you wish to create.')
+param appName string = 'fnapp${uniqueString(resourceGroup().id)}'
+
+@description('Storage Account type')
+@allowed([
+  'Standard_LRS'
+  'Standard_GRS'
+  'Standard_RAGRS'
+])
+param storageAccountType string = 'Standard_LRS'
+
+@description('Location for all resources.')
 param location string = resourceGroup().location
-param functionAppName string = 'fnapp${uniqueString(resourceGroup().id)}'
-param storageAccountName string = 'blob${uniqueString(resourceGroup().id)}'
+
+@description('Location for Application Insights')
+param appInsightsLocation string
+
+@description('The language worker runtime to load in the function app.')
+@allowed([
+  'node'
+  'dotnet'
+  'java'
+])
+param runtime string = 'node'
+
+var functionAppName = appName
+var hostingPlanName = appName
+var applicationInsightsName = appName
+var storageAccountName = '${uniqueString(resourceGroup().id)}azfunctions'
+var functionWorkerRuntime = runtime
 @description('Cosmos DB account name')
 param accountName string = 'cosmos-${uniqueString(resourceGroup().id)}'
 
@@ -75,26 +102,40 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppName
   location: location
   kind: 'functionapp'
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     serverFarmId: serverFarm.id
-    clientAffinityEnabled: false
     siteConfig: {
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage}'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+        }
+        {
+          name: 'WEBSITE_CONTENTSHARE'
+          value: toLower(functionAppName)
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
           value: '~4'
         }
         {
-          name: 'FUNCTIONS_WORKER_RUNTIME'
-          value: 'node'
+          name: 'WEBSITE_NODE_DEFAULT_VERSION'
+          value: '~14'
         }
         {
-          name: 'WEBSITE_NODE_DEFAULT_VERSION'
-          value: '~14' // Change according to your preferred Node.js version
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: applicationInsights.properties.InstrumentationKey
+        }
+        {
+          name: 'FUNCTIONS_WORKER_RUNTIME'
+          value: functionWorkerRuntime
         }
         {
           name: 'COSMOS_DB_CONNECTION_STRING'
@@ -113,7 +154,20 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           value: containerName
         }
       ]
+      ftpsState: 'FtpsOnly'
+      minTlsVersion: '1.2'
     }
+    httpsOnly: true
+  }
+}
+
+resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: applicationInsightsName
+  location: appInsightsLocation
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    Request_Source: 'rest'
   }
 }
 
@@ -135,8 +189,11 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: storageAccountName
   location: location
   sku: {
-    name: 'Standard_LRS'
+    name: storageAccountType
   }
-  kind: 'StorageV2'
+  kind: 'Storage'
+  properties: {
+    supportsHttpsTrafficOnly: true
+    defaultToOAuthAuthentication: true
+  }
 }
-
