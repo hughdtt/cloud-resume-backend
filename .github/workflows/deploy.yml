@@ -45,6 +45,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: .github/workflows/crc-api-template.json
+          deploymentMode: Incremental
 
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
