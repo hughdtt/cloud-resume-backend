@@ -1,0 +1,1251 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_getviewcount_name": {
+            "defaultValue": "getviewcount",
+            "type": "String"
+        },
+        "components_getviewcount_name": {
+            "defaultValue": "getviewcount",
+            "type": "String"
+        },
+        "serverfarms_ASP_DevCRCAPI_9ad2_name": {
+            "defaultValue": "ASP-DevCRCAPI-9ad2",
+            "type": "String"
+        },
+        "storageAccounts_devcrcapi993d_name": {
+            "defaultValue": "devcrcapi993d",
+            "type": "String"
+        },
+        "databaseAccounts_viewcounter_name": {
+            "defaultValue": "viewcounter",
+            "type": "String"
+        },
+        "actionGroups_Application_Insights_Smart_Detection_name": {
+            "defaultValue": "Application Insights Smart Detection",
+            "type": "String"
+        },
+        "smartdetectoralertrules_failure_anomalies___viewcounter_name": {
+            "defaultValue": "failure anomalies - viewcounter",
+            "type": "String"
+        },
+        "smartdetectoralertrules_failure_anomalies___getviewcount_name": {
+            "defaultValue": "failure anomalies - getviewcount",
+            "type": "String"
+        },
+        "smartdetectoralertrules_failure_anomalies___viewcountapi_name": {
+            "defaultValue": "failure anomalies - viewcountapi",
+            "type": "String"
+        },
+        "components_viewcountapi_externalid": {
+            "defaultValue": "/subscriptions/07de0cb3-e15c-46ed-a293-d096fc841c7c/resourceGroups/dev-crc-api/providers/microsoft.insights/components/viewcountapi",
+            "type": "String"
+        },
+        "components_viewcounter_externalid": {
+            "defaultValue": "/subscriptions/07de0cb3-e15c-46ed-a293-d096fc841c7c/resourceGroups/dev-crc-api/providers/microsoft.insights/components/viewcounter",
+            "type": "String"
+        },
+        "workspaces_DefaultWorkspace_07de0cb3_e15c_46ed_a293_d096fc841c7c_EAU_externalid": {
+            "defaultValue": "/subscriptions/07de0cb3-e15c-46ed-a293-d096fc841c7c/resourceGroups/DefaultResourceGroup-EAU/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-07de0cb3-e15c-46ed-a293-d096fc841c7c-EAU",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "apiVersion": "2023-04-15",
+            "name": "[parameters('databaseAccounts_viewcounter_name')]",
+            "location": "Australia Southeast",
+            "tags": {
+                "defaultExperience": "Core (SQL)",
+                "hidden-cosmos-mmspecial": ""
+            },
+            "kind": "GlobalDocumentDB",
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "publicNetworkAccess": "Enabled",
+                "enableAutomaticFailover": false,
+                "enableMultipleWriteLocations": false,
+                "isVirtualNetworkFilterEnabled": false,
+                "virtualNetworkRules": [],
+                "disableKeyBasedMetadataWriteAccess": false,
+                "enableFreeTier": false,
+                "enableAnalyticalStorage": false,
+                "analyticalStorageConfiguration": {
+                    "schemaType": "WellDefined"
+                },
+                "databaseAccountOfferType": "Standard",
+                "defaultIdentity": "FirstPartyIdentity",
+                "networkAclBypass": "None",
+                "disableLocalAuth": false,
+                "enablePartitionMerge": false,
+                "minimalTlsVersion": "Tls",
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "Session",
+                    "maxIntervalInSeconds": 5,
+                    "maxStalenessPrefix": 100
+                },
+                "locations": [
+                    {
+                        "locationName": "Australia Southeast",
+                        "provisioningState": "Succeeded",
+                        "failoverPriority": 0,
+                        "isZoneRedundant": false
+                    }
+                ],
+                "cors": [],
+                "capabilities": [
+                    {
+                        "name": "EnableServerless"
+                    }
+                ],
+                "ipRules": [],
+                "backupPolicy": {
+                    "type": "Periodic",
+                    "periodicModeProperties": {
+                        "backupIntervalInMinutes": 240,
+                        "backupRetentionIntervalInHours": 8,
+                        "backupStorageRedundancy": "Geo"
+                    }
+                },
+                "networkAclBypassResourceIds": [],
+                "capacity": {
+                    "totalThroughputLimit": 4000
+                },
+                "keysMetadata": {}
+            }
+        },
+        {
+            "type": "microsoft.insights/actionGroups",
+            "apiVersion": "2023-01-01",
+            "name": "[parameters('actionGroups_Application_Insights_Smart_Detection_name')]",
+            "location": "Global",
+            "properties": {
+                "groupShortName": "SmartDetect",
+                "enabled": true,
+                "emailReceivers": [],
+                "smsReceivers": [],
+                "webhookReceivers": [],
+                "eventHubReceivers": [],
+                "itsmReceivers": [],
+                "azureAppPushReceivers": [],
+                "automationRunbookReceivers": [],
+                "voiceReceivers": [],
+                "logicAppReceivers": [],
+                "azureFunctionReceivers": [],
+                "armRoleReceivers": [
+                    {
+                        "name": "Monitoring Contributor",
+                        "roleId": "749f88d5-cbae-40b8-bcfc-e573ddc772fa",
+                        "useCommonAlertSchema": true
+                    },
+                    {
+                        "name": "Monitoring Reader",
+                        "roleId": "43d0d8ad-25c7-4714-9337-8ba259a9fe05",
+                        "useCommonAlertSchema": true
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2020-02-02",
+            "name": "[parameters('components_getviewcount_name')]",
+            "location": "australiasoutheast",
+            "kind": "web",
+            "properties": {
+                "Application_Type": "web",
+                "Flow_Type": "Redfield",
+                "Request_Source": "IbizaWebAppExtensionCreate",
+                "RetentionInDays": 90,
+                "WorkspaceResourceId": "[parameters('workspaces_DefaultWorkspace_07de0cb3_e15c_46ed_a293_d096fc841c7c_EAU_externalid')]",
+                "IngestionMode": "LogAnalytics",
+                "publicNetworkAccessForIngestion": "Enabled",
+                "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-09-01",
+            "name": "[parameters('storageAccounts_devcrcapi993d_name')]",
+            "location": "australiasoutheast",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "properties": {
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": true,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-09-01",
+            "name": "[parameters('serverfarms_ASP_DevCRCAPI_9ad2_name')]",
+            "location": "Australia Southeast",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y",
+                "capacity": 0
+            },
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[parameters('smartdetectoralertrules_failure_anomalies___viewcountapi_name')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
+            ],
+            "properties": {
+                "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "PT1M",
+                "detector": {
+                    "id": "FailureAnomaliesDetector"
+                },
+                "scope": [
+                    "[parameters('components_viewcountapi_externalid')]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[parameters('smartdetectoralertrules_failure_anomalies___viewcounter_name')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
+            ],
+            "properties": {
+                "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "PT1M",
+                "detector": {
+                    "id": "FailureAnomaliesDetector"
+                },
+                "scope": [
+                    "[parameters('components_viewcounter_externalid')]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-04-15",
+            "name": "[concat(parameters('databaseAccounts_viewcounter_name'), '/PageCounters')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_viewcounter_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "PageCounters"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-04-15",
+            "name": "[concat(parameters('databaseAccounts_viewcounter_name'), '/', parameters('databaseAccounts_viewcounter_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_viewcounter_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "viewcounter"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
+            "apiVersion": "2023-04-15",
+            "name": "[concat(parameters('databaseAccounts_viewcounter_name'), '/00000000-0000-0000-0000-000000000001')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_viewcounter_name'))]"
+            ],
+            "properties": {
+                "roleName": "Cosmos DB Built-in Data Reader",
+                "type": "BuiltInRole",
+                "assignableScopes": [
+                    "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_viewcounter_name'))]"
+                ],
+                "permissions": [
+                    {
+                        "dataActions": [
+                            "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/executeQuery",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/readChangeFeed",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read"
+                        ],
+                        "notDataActions": []
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
+            "apiVersion": "2023-04-15",
+            "name": "[concat(parameters('databaseAccounts_viewcounter_name'), '/00000000-0000-0000-0000-000000000002')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_viewcounter_name'))]"
+            ],
+            "properties": {
+                "roleName": "Cosmos DB Built-in Data Contributor",
+                "type": "BuiltInRole",
+                "assignableScopes": [
+                    "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_viewcounter_name'))]"
+                ],
+                "permissions": [
+                    {
+                        "dataActions": [
+                            "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/*",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/*"
+                        ],
+                        "notDataActions": []
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/degradationindependencyduration')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "degradationindependencyduration",
+                    "DisplayName": "Degradation in dependency duration",
+                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/degradationinserverresponsetime')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "degradationinserverresponsetime",
+                    "DisplayName": "Degradation in server response time",
+                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/digestMailConfiguration')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "digestMailConfiguration",
+                    "DisplayName": "Digest Mail Configuration",
+                    "Description": "This rule describes the digest mail preferences",
+                    "HelpUrl": "www.homail.com",
+                    "IsHidden": true,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/extension_billingdatavolumedailyspikeextension')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_billingdatavolumedailyspikeextension",
+                    "DisplayName": "Abnormal rise in daily data volume (preview)",
+                    "Description": "This detection rule automatically analyzes the billing data generated by your application, and can warn you about an unusual increase in your application's billing costs",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/tree/master/SmartDetection/billing-data-volume-daily-spike.md",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/extension_canaryextension')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_canaryextension",
+                    "DisplayName": "Canary extension",
+                    "Description": "Canary extension",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/",
+                    "IsHidden": true,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/extension_exceptionchangeextension')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_exceptionchangeextension",
+                    "DisplayName": "Abnormal rise in exception volume (preview)",
+                    "Description": "This detection rule automatically analyzes the exceptions thrown in your application, and can warn you about unusual patterns in your exception telemetry.",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/abnormal-rise-in-exception-volume.md",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/extension_memoryleakextension')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_memoryleakextension",
+                    "DisplayName": "Potential memory leak detected (preview)",
+                    "Description": "This detection rule automatically analyzes the memory consumption of each process in your application, and can warn you about potential memory leaks or increased memory consumption.",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/tree/master/SmartDetection/memory-leak.md",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/extension_securityextensionspackage')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_securityextensionspackage",
+                    "DisplayName": "Potential security issue detected (preview)",
+                    "Description": "This detection rule automatically analyzes the telemetry generated by your application and detects potential security issues.",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/application-security-detection-pack.md",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/extension_traceseveritydetector')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "extension_traceseveritydetector",
+                    "DisplayName": "Degradation in trace severity ratio (preview)",
+                    "Description": "This detection rule automatically analyzes the trace logs emitted from your application, and can warn you about unusual patterns in the severity of your trace telemetry.",
+                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/degradation-in-trace-severity-ratio.md",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/longdependencyduration')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "longdependencyduration",
+                    "DisplayName": "Long dependency duration",
+                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/migrationToAlertRulesCompleted')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "migrationToAlertRulesCompleted",
+                    "DisplayName": "Migration To Alert Rules Completed",
+                    "Description": "A configuration that controls the migration state of Smart Detection to Smart Alerts",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": true,
+                    "IsEnabledByDefault": false,
+                    "IsInPreview": true,
+                    "SupportsEmailNotifications": false
+                },
+                "enabled": false,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/slowpageloadtime')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "slowpageloadtime",
+                    "DisplayName": "Slow page load time",
+                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[concat(parameters('components_getviewcount_name'), '/slowserverresponsetime')]",
+            "location": "australiasoutheast",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+            ],
+            "properties": {
+                "ruleDefinitions": {
+                    "Name": "slowserverresponsetime",
+                    "DisplayName": "Slow server response time",
+                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
+                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
+                    "IsHidden": false,
+                    "IsEnabledByDefault": true,
+                    "IsInPreview": false,
+                    "SupportsEmailNotifications": true
+                },
+                "enabled": true,
+                "sendEmailsToSubscriptionOwners": true,
+                "customEmails": []
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('storageAccounts_devcrcapi993d_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_devcrcapi993d_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "allowPermanentDelete": false,
+                    "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('storageAccounts_devcrcapi993d_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_devcrcapi993d_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "protocolSettings": {
+                    "smb": {}
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "shareDeleteRetentionPolicy": {
+                    "enabled": true,
+                    "days": 7
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('storageAccounts_devcrcapi993d_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_devcrcapi993d_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('storageAccounts_devcrcapi993d_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_devcrcapi993d_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-09-01",
+            "name": "[parameters('sites_getviewcount_name')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_DevCRCAPI_9ad2_name'))]"
+            ],
+            "tags": {
+                "hidden-link: /app-insights-resource-id": "/subscriptions/07de0cb3-e15c-46ed-a293-d096fc841c7c/resourceGroups/Dev-CRC-API/providers/microsoft.insights/components/getviewcount",
+                "hidden-link: /app-insights-instrumentation-key": "f6131075-d4a6-4e41-9315-454561d3c0e7",
+                "hidden-link: /app-insights-conn-string": "InstrumentationKey=f6131075-d4a6-4e41-9315-454561d3c0e7;IngestionEndpoint=https://australiasoutheast-0.in.applicationinsights.azure.com/;LiveEndpoint=https://australiasoutheast.livediagnostics.monitor.azure.com/"
+            },
+            "kind": "functionapp",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_getviewcount_name'), '.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('sites_getviewcount_name'), '.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_DevCRCAPI_9ad2_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "A9C55459FCD5AF409600A558DD45B4C6D40BD7FFCBBEB4C466BFBB9EE0991F99",
+                "containerSize": 1536,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "publicNetworkAccess": "Enabled",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/ftp')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "tags": {
+                "hidden-link: /app-insights-resource-id": "/subscriptions/07de0cb3-e15c-46ed-a293-d096fc841c7c/resourceGroups/Dev-CRC-API/providers/microsoft.insights/components/getviewcount",
+                "hidden-link: /app-insights-instrumentation-key": "f6131075-d4a6-4e41-9315-454561d3c0e7",
+                "hidden-link: /app-insights-conn-string": "InstrumentationKey=f6131075-d4a6-4e41-9315-454561d3c0e7;IngestionEndpoint=https://australiasoutheast-0.in.applicationinsights.azure.com/;LiveEndpoint=https://australiasoutheast.livediagnostics.monitor.azure.com/"
+            },
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/scm')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "tags": {
+                "hidden-link: /app-insights-resource-id": "/subscriptions/07de0cb3-e15c-46ed-a293-d096fc841c7c/resourceGroups/Dev-CRC-API/providers/microsoft.insights/components/getviewcount",
+                "hidden-link: /app-insights-instrumentation-key": "f6131075-d4a6-4e41-9315-454561d3c0e7",
+                "hidden-link: /app-insights-conn-string": "InstrumentationKey=f6131075-d4a6-4e41-9315-454561d3c0e7;IngestionEndpoint=https://australiasoutheast-0.in.applicationinsights.azure.com/;LiveEndpoint=https://australiasoutheast.livediagnostics.monitor.azure.com/"
+            },
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/web')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "tags": {
+                "hidden-link: /app-insights-resource-id": "/subscriptions/07de0cb3-e15c-46ed-a293-d096fc841c7c/resourceGroups/Dev-CRC-API/providers/microsoft.insights/components/getviewcount",
+                "hidden-link: /app-insights-instrumentation-key": "f6131075-d4a6-4e41-9315-454561d3c0e7",
+                "hidden-link: /app-insights-conn-string": "InstrumentationKey=f6131075-d4a6-4e41-9315-454561d3c0e7;IngestionEndpoint=https://australiasoutheast-0.in.applicationinsights.azure.com/;LiveEndpoint=https://australiasoutheast.livediagnostics.monitor.azure.com/"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php"
+                ],
+                "netFrameworkVersion": "v6.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2019",
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$getviewcount",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "publicNetworkAccess": "Enabled",
+                "cors": {
+                    "allowedOrigins": [
+                        "https://portal.azure.com",
+                        "https://dev-hugh-crc.azureedge.net",
+                        "https://resume.hughdtt.com"
+                    ],
+                    "supportCredentials": true
+                },
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 200,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/1e10c9e30da1403088e7d1f8b7202291')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY_FUNCTIONS_V1",
+                "message": "{\"type\":\"deployment\",\"sha\":\"c1fd09aa742ee8f128596ac012cf0c58270cbe9f\",\"repoName\":\"hughdtt/cloud-resume-backend\",\"actor\":\"hughdtt\",\"slotName\":\"production\"}",
+                "start_time": "2023-08-07T10:02:12.5677753Z",
+                "end_time": "2023-08-07T10:14:39.2465988Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/29151efcc3cb4414996f18b9b3120489')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY_FUNCTIONS_V1",
+                "message": "{\"type\":\"deployment\",\"sha\":\"3641f6d54f8cc0df12fcd2fc58b5d7f2df257292\",\"repoName\":\"hughdtt/cloud-resume-backend\",\"actor\":\"hughdtt\",\"slotName\":\"production\"}",
+                "start_time": "2023-08-07T10:54:49.3094287Z",
+                "end_time": "2023-08-07T10:54:52.0975855Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/359c6d44a78843f9a2c2c2306f7e16b1')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY_FUNCTIONS_V1",
+                "message": "{\"type\":\"deployment\",\"sha\":\"3b8dfa230ca4046ca2f2a2273ce8a63745cda2ee\",\"repoName\":\"hughdtt/cloud-resume-backend\",\"actor\":\"hughdtt\",\"slotName\":\"production\"}",
+                "start_time": "2023-08-07T10:35:36.0572631Z",
+                "end_time": "2023-08-07T10:35:39.2288105Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/3641f6d54f8cc0df12fcd2fc58b5d7f2df257292')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "hugh.dtt@gmail.com",
+                "author": "Hugh Duong-Tran-Tien",
+                "deployer": "GitHub",
+                "message": "went back to original\n",
+                "start_time": "2023-08-07T11:07:26.2464735Z",
+                "end_time": "2023-08-07T11:07:28.8626929Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/36bc19850f904b5f9a0c4795593e33e9')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY_FUNCTIONS_V1",
+                "message": "{\"type\":\"deployment\",\"sha\":\"0a5bdf579d9d422618e57082a9ebd73d0130e11d\",\"repoName\":\"hughdtt/cloud-resume-backend\",\"actor\":\"hughdtt\",\"slotName\":\"production\"}",
+                "start_time": "2023-08-07T10:14:54.8505268Z",
+                "end_time": "2023-08-07T10:19:05.00648Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/9262f802e2f648ae9439da243faf8424')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY_FUNCTIONS_V1",
+                "message": "{\"type\":\"deployment\",\"sha\":\"003e09eb6ae40a879984a1438b36285d92115ba1\",\"repoName\":\"hughdtt/cloud-resume-backend\",\"actor\":\"hughdtt\",\"slotName\":\"production\"}",
+                "start_time": "2023-08-08T00:41:09.4790962Z",
+                "end_time": "2023-08-08T00:42:21.3959856Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/baf4a89cd993964bd056928cffc0adef25f6cb5e')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "hugh.dtt@gmail.com",
+                "author": "Hugh Duong-Tran-Tien",
+                "message": "readme\n",
+                "start_time": "2023-08-07T11:02:54.0420396Z",
+                "end_time": "2023-08-07T11:02:59.6050254Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/ee07d7fc4898433e9169db90217fcd19')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY_FUNCTIONS_V1",
+                "message": "{\"type\":\"deployment\",\"sha\":\"260d3814b555885912e85b8932e0da6ac810ac04\",\"repoName\":\"hughdtt/cloud-resume-backend\",\"actor\":\"hughdtt\",\"slotName\":\"production\"}",
+                "start_time": "2023-08-08T00:47:04.4368334Z",
+                "end_time": "2023-08-08T00:48:23.8466363Z",
+                "active": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/ffa3d0b77fee76b8416f0341cf0250bd2bbb02c3')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "hugh.dtt@gmail.com",
+                "author": "Hugh Duong-Tran-Tien",
+                "deployer": "GitHub",
+                "message": "workflow\n",
+                "start_time": "2023-08-07T09:52:00.4260302Z",
+                "end_time": "2023-08-07T09:52:10.1057087Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/functions",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/CosmosCRUD')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "script_root_path_href": "https://getviewcount.azurewebsites.net/admin/vfs/site/wwwroot/CosmosCRUD/",
+                "script_href": "https://getviewcount.azurewebsites.net/admin/vfs/site/wwwroot/CosmosCRUD/index.js",
+                "config_href": "https://getviewcount.azurewebsites.net/admin/vfs/site/wwwroot/CosmosCRUD/function.json",
+                "test_data_href": "https://getviewcount.azurewebsites.net/admin/vfs/data/Functions/sampledata/CosmosCRUD.dat",
+                "href": "https://getviewcount.azurewebsites.net/admin/functions/CosmosCRUD",
+                "config": {},
+                "test_data": "{\"method\":\"get\",\"queryStringParams\":[{\"name\":\"id\",\"value\":\"1\"}],\"headers\":[],\"body\":\"\"}",
+                "invoke_url_template": "https://getviewcount.azurewebsites.net/api/cosmoscrud",
+                "language": "node",
+                "isDisabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('sites_getviewcount_name'), '/', parameters('sites_getviewcount_name'), '.azurewebsites.net')]",
+            "location": "Australia Southeast",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_getviewcount_name'))]"
+            ],
+            "properties": {
+                "siteName": "getviewcount",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
+            "apiVersion": "2021-04-01",
+            "name": "[parameters('smartdetectoralertrules_failure_anomalies___getviewcount_name')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]",
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
+            ],
+            "properties": {
+                "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
+                "state": "Enabled",
+                "severity": "Sev3",
+                "frequency": "PT1M",
+                "detector": {
+                    "id": "FailureAnomaliesDetector"
+                },
+                "scope": [
+                    "[resourceId('microsoft.insights/components', parameters('components_getviewcount_name'))]"
+                ],
+                "actionGroups": {
+                    "groupIds": [
+                        "[resourceId('microsoft.insights/actionGroups', parameters('actionGroups_Application_Insights_Smart_Detection_name'))]"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-04-15",
+            "name": "[concat(parameters('databaseAccounts_viewcounter_name'), '/PageCounters/ViewCount')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_viewcounter_name'), 'PageCounters')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_viewcounter_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "ViewCount",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/ViewCountID"
+                        ],
+                        "kind": "Hash",
+                        "version": 2
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('storageAccounts_devcrcapi993d_name'), '/default/azure-webjobs-hosts')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_devcrcapi993d_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_devcrcapi993d_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('storageAccounts_devcrcapi993d_name'), '/default/azure-webjobs-secrets')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_devcrcapi993d_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_devcrcapi993d_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('storageAccounts_devcrcapi993d_name'), '/default/getviewcountbe04')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_devcrcapi993d_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_devcrcapi993d_name'))]"
+            ],
+            "properties": {
+                "accessTier": "TransactionOptimized",
+                "shareQuota": 5120,
+                "enabledProtocols": "SMB"
+            }
+        }
+    ]
+}
