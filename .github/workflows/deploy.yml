@@ -36,6 +36,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: List files in current directory
+        run: ls -la
+
       - name: Deploy ARM resource
         uses: azure/arm-deploy@v1
         with:
