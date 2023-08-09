@@ -59,7 +59,6 @@ ARM Template should deploy the following resources:
 
 ![resource-visualiser.png](./assets/resource-visualiser.PNG)
 
-
 ## Acknowledgements
 This was done as part of Forrest Brazeal's [Cloud Resume Challenge](https://cloudresumechallenge.dev/).
 
@@ -83,3 +82,5 @@ This was done as part of Forrest Brazeal's [Cloud Resume Challenge](https://clou
     - [x] Resource group relations
 - [ ] ARM template files for resource group (environment agnostic ie staging/prod)
 - [ ] YAML infrastructure deploy
+
+
