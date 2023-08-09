@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'CosmosCRUD/**'
-      - 'unit-tests/**'
-      - 'cypress/**'
+    # paths:
+    #   - 'CosmosCRUD/**'
+    #   - 'unit-tests/**'
+    #   - 'cypress/**'
 
 jobs:
   build-and-test:
