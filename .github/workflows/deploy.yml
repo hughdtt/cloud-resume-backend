@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - 'CosmosCRUD/**'
-    #   - 'unit-tests/**'
-    #   - 'cypress/**'
+    paths:
+      - 'CosmosCRUD/**'
+      - 'unit-tests/**'
+      - 'cypress/**'
+      - '.github/workflow/main.bicep'
 
 jobs:
   build-and-test:
