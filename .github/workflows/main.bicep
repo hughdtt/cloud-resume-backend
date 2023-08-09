@@ -108,6 +108,14 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   properties: {
     serverFarmId: serverFarm.id
     siteConfig: {
+      cors: {
+        allowedOrigins: [
+          'https://portal.azure.com'
+          'https://dev-hugh-crc.azureedge.net'
+          'https://resume.hughdtt.com'
+        ]
+        supportCredentials: true
+      }
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
