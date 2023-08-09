@@ -46,6 +46,7 @@ jobs:
 
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
+        id: fa
         with:
           app-name: getviewcount
           package: deploy.zip
