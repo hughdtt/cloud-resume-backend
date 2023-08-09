@@ -126,6 +126,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           value: toLower(functionAppName)
         }
         {
+          name: 'WEBSITE_RUN_FROM_PACKAGE'
+          value: '1'
+        }
+        {
           name: 'FUNCTIONS_EXTENSION_VERSION'
           value: '~4'
         }

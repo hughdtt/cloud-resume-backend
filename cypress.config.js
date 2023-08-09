@@ -7,6 +7,6 @@ module.exports = defineConfig({
     },
   },
   env: {
-    api_url: 'https://getviewcount.azurewebsites.net/api/cosmoscrud?code=OkwHY8gakf3eMKiX2xInvkDeJCm81Q2DlYUWyi8DZszdAzFud587gA%3D%3D'
+    api_url: 'https://fnappt6c7s57cuv37w.azurewebsites.net/api/CosmosCRUD?code=ZqNwcLOkc3iNHTITf8-bVHgycjI0xIsOYuE-LDnODEboAzFuc4KXzg=='
   }
 });

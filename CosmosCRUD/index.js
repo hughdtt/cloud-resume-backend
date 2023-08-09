@@ -1,10 +1,10 @@
 const CosmosClient = require("@azure/cosmos").CosmosClient;
 
 module.exports = async function (context, req) {
-    const endpoint = process.env.COSMOS_ENDPOINT;
-    const key = process.env.COSMOS_KEY;
-    const databaseId = "PageCounters";
-    const containerId = "ViewCount";
+    const endpoint = process.env.COSMOS_DB_ENDPOINT;
+    const key = process.env.COSMOS_DB_CONNECTION_STRING;
+    const databaseId = "myDatabase";
+    const containerId = "myContainer";
     //TODO: header check for once view update per day
 
     const client = new CosmosClient({ endpoint, key });
