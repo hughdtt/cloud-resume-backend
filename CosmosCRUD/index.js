@@ -5,6 +5,7 @@ module.exports = async function (context, req) {
     const key = process.env.COSMOS_KEY;
     const databaseId = "PageCounters";
     const containerId = "ViewCount";
+    //TODO: header check for once view update per day
 
     const client = new CosmosClient({ endpoint, key });
     const container = client.database(databaseId).container(containerId);
@@ -21,4 +22,6 @@ module.exports = async function (context, req) {
     context.res = {
         body: retrievedItem
     };
+
+    
 };
