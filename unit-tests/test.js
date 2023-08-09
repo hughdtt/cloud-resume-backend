@@ -26,8 +26,8 @@ describe('Azure Function', () => {
   it('increments the view count and retrieves the item', async () => {
     await myFunction(context, req);
 
-    expect(CosmosClient.prototype.database).toHaveBeenCalledWith('PageCounters');
-    expect(CosmosClient.prototype.database().container).toHaveBeenCalledWith('ViewCount');
+    expect(CosmosClient.prototype.database).toHaveBeenCalledWith('myDatabase');
+    expect(CosmosClient.prototype.database().container).toHaveBeenCalledWith('myContainer');
     expect(CosmosClient.prototype.database().container().item().read).toHaveBeenCalledTimes(2);
     expect(CosmosClient.prototype.database().container().item().replace).toHaveBeenCalledWith({ viewCount: 6 });
     expect(context.res.body).toEqual({ viewCount: 6 });
