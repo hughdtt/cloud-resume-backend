@@ -25,7 +25,6 @@ param appInsightsLocation string
 param runtime string = 'node'
 
 var functionAppName = appName
-var hostingPlanName = appName
 var applicationInsightsName = appName
 var storageAccountName = '${uniqueString(resourceGroup().id)}azfunctions'
 var functionWorkerRuntime = runtime
