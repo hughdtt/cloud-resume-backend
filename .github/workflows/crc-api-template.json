@@ -692,30 +692,6 @@
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts/fileServices",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_devcrcapi993d_name'), '/default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_devcrcapi993d_name'))]"
-            ],
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            },
-            "properties": {
-                "protocolSettings": {
-                    "smb": {}
-                },
-                "cors": {
-                    "corsRules": []
-                },
-                "shareDeleteRetentionPolicy": {
-                    "enabled": true,
-                    "days": 7
-                }
-            }
-        },
-        {
             "type": "Microsoft.Storage/storageAccounts/queueServices",
             "apiVersion": "2022-09-01",
             "name": "[concat(parameters('storageAccounts_devcrcapi993d_name'), '/default')]",
@@ -941,7 +917,7 @@
                 "test_data_href": "https://getviewcount.azurewebsites.net/admin/vfs/data/Functions/sampledata/CosmosCRUD.dat",
                 "href": "https://getviewcount.azurewebsites.net/admin/functions/CosmosCRUD",
                 "config": {},
-                "test_data": "{\"method\":\"get\",\"queryStringParams\":[{\"name\":\"id\",\"value\":\"1\"}],\"headers\":[],\"body\":\"\"}",
+                "test_data": "{\"method\":\"get\",\"headers\":[],\"body\":\"\"}",
                 "invoke_url_template": "https://getviewcount.azurewebsites.net/api/cosmoscrud",
                 "language": "node",
                 "isDisabled": false
@@ -1061,20 +1037,6 @@
                 "defaultEncryptionScope": "$account-encryption-key",
                 "denyEncryptionScopeOverride": false,
                 "publicAccess": "None"
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_devcrcapi993d_name'), '/default/getviewcountbe04')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_devcrcapi993d_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_devcrcapi993d_name'))]"
-            ],
-            "properties": {
-                "accessTier": "TransactionOptimized",
-                "shareQuota": 5120,
-                "enabledProtocols": "SMB"
             }
         }
     ]
