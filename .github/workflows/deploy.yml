@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'CosmosCRUD/**'
-      - 'unit-tests/**'
-      - 'cypress/**'
-      - '.github/workflow/**'
+    # paths:
+    #   - 'CosmosCRUD/**'
+    #   - 'unit-tests/**'
+    #   - 'cypress/**'
+    #   - '.github/workflow/**'
 
 jobs:
   build-and-test:
