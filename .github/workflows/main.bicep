@@ -109,7 +109,6 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           'https://portal.azure.com'
           'https://dev-hugh-crc.azureedge.net'
           'https://resume.hughdtt.com'
-          'http://localhost:5173'
         ]
         supportCredentials: true
       }
