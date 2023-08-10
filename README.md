@@ -6,6 +6,8 @@ The `getviewcount` Web API is an **Azure Function** that increments then retriev
 
 The web api serves as a view counter RESTful API for the [frontend](https://github.com/hughdtt/cloud-resume-frontend) of the [Cloud Resume Challenge](https://cloudresumechallenge.dev/).
 
+Solid CI/CD has been implemented. If the Azure resource group exists, it'll deploy the necessary resources, unit test the code, deploy code to Azure function and test the prod api url returns the correct response.
+
 ## Install
 
 You can download the repo to test it locally if you'd like. You'll just need to have Azure Function Core Tools installed.
@@ -44,7 +46,7 @@ Deploy.yml job steps:
 
 ### Deploying Azure resources
 
-[doc](https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-github-actions?tabs=userlevel)
+Read more on this [doc](https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-github-actions?tabs=userlevel)
 
 ### Considerations
 
@@ -66,6 +68,12 @@ This was done as part of Forrest Brazeal's [Cloud Resume Challenge](https://clou
 
 ## Further considerations
 ### Mod Explorations
+#### Developer Mods
+- [ ] 
 
+#### DevOps Mods
+
+#### Security Mods
+- [ ] Check Privilege
 
 
