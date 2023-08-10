@@ -8,7 +8,7 @@ on:
       - 'CosmosCRUD/**'
       - 'unit-tests/**'
       - 'cypress/**'
-      - '.github/workflow/main.bicep'
+      - '.github/workflow/**'
 
 jobs:
   build-and-test:
